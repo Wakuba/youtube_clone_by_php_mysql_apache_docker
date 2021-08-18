@@ -1,10 +1,24 @@
 version: '3.8'
 services:
-        php-apache-environment: 
-                container_name: youtube_clone_by_php_mysql_apache_docker
-                image: php:8.0-apache
-                volumes:
-                        - ./php/src:/var/www/html/
-                ports:
-                        - 8000:80
-
+    php-apache-environment: 
+        container_name: youtube_clone_by_php_mysql_apache_docker
+        build:
+            context: ./php
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+        volumes:
+            - ./php/src:/var/www/html/
+        ports:
+            - 8000:80 
+    db:
+        container_name: db
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: MY_DATABASE
+            MYSQL_USER: MYSQL_USER
+            MYSQL_PASSWORD: MYSQL_PASSWORD
+        ports:
+            - "9906:3306" 
